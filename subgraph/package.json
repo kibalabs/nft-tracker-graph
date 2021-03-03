@@ -1,5 +1,5 @@
 {
-  "name": "@kibalabs/nft-tracker",
+  "name": "@kibalabs/nft-tracker-graph",
   "version": "0.0.1",
   "description": "NFT Tracker Subgraph for TheGraph",
   "license": "MIT",
