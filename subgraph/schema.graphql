@@ -1,0 +1,53 @@
+type Contract @entity {
+  id: ID!
+  isERC721: Boolean!
+}
+
+interface Event {
+  id: ID!
+  transaction: Transaction!
+  timestamp: BigInt!
+}
+
+type Transaction @entity {
+  id: ID!
+  timestamp: BigInt!
+  blockNumber: BigInt!
+  value: BigInt!
+  gasUsed: BigInt!
+  gasPrice: BigInt!
+  events: [Event!]! @derivedFrom(field: "transaction")
+}
+
+type Transfer implements Event @entity {
+  id: ID!
+  transaction: Transaction!
+  timestamp: BigInt!
+  token: Token!
+  from: Account!
+  to: Account!
+}
+
+type Account @entity {
+  id: ID!
+  tokens: [Token!]! @derivedFrom(field: "owner")
+  transfersFrom: [Transfer!]! @derivedFrom(field: "from")
+  transfersTo: [Transfer!]! @derivedFrom(field: "to")
+}
+
+type TokenRegistry @entity {
+  id: ID!
+  supportsMetadata: Boolean!
+  name: String
+  symbol: String
+  tokens: [Token!]! @derivedFrom(field: "registry")
+}
+
+type Token @entity {
+  id: ID!
+  registry: TokenRegistry!
+  identifier: BigInt!
+  owner: Account!
+  uri: String
+  transfers: [Transfer!]! @derivedFrom(field: "token")
+}
